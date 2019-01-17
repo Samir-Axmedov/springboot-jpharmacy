@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Strona domowa</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('home')"/>
+<div id="logregister" class="container">
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <h2>Formularz logowania</h2>
+            <form th:method="POST" th:action="@{/login}">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        Nieprawidłowa nazwa użytkownika, hasło lub konto nie zostało jeszcze aktywowane
+                    </div>
+                </div>
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info">
+                        <strong>Wylogowano!</strong> Zaloguj się ponownie, aby dokonać zakupów.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username">Nazwa użytkownika</label>
+                    <input type="text" id="username" name="username" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="password" class="labellogin">Hasło</label>
+                    <input type="password" id="password" name="password" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <input
+                            type="hidden"
+                            th:name="${_csrf.parameterName}"
+                            th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-success btn-loginn">Zaloguj się</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

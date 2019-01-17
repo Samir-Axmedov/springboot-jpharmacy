@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Strona domowa</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('home')"/>
+
+<div id="main" class="container">
+
+    <div>
+        <h1>Domyślny widok błędu w Spring Boot</h1>
+        <div>
+            Wiadomość: <span th:text="${message}"></span></br>
+            Wyjątek: <span th:text="${exception}"></span></br>
+
+            StackTrace: <span th:text="${stackTrace}" ></span>
+        </div>
+    </div>
+
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

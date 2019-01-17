@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Błąd bazy</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('home')"/>
+
+<div id="main" class="container">
+
+    <div>
+        <h1>Błąd związany z bazą danych</h1>
+        <div>Odwołanie do zasobu bazy danych spowodowało problem.
+        </div>
+    </div>
+
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

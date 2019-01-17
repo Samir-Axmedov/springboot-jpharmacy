@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:fragment="header-css">
+        <!-- this is header-css -->
+        <link rel="stylesheet" type="text/css"
+              href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css"
+              href="/statics/css/main.css"/>
+    </div>
+</head>
+<body>
+
+<div th:fragment="header(pageName)">
+
+    <div id="top">
+        <div class="container">
+            <div class="col-md-6 contact">
+                <span class=" glyphicon glyphicon-earphone" aria-hidden="true"></span> Skontaktuj się z nami <a href="tel:227923470">(22) 7923470</a> lub <a href="mailto:jambopharmacy@o2.pl">contact@jpharmacy.com</a>
+            </div>
+            <div class="col-md-6">
+                <ul class="menulogowanie">
+                    <li sec:authorize="isAnonymous()" th:class="${pageName eq 'loginForm'}? 'active'">
+                        <span class="glyphicon glyphicon-user logicon" aria-hidden="true"></span>
+                        <a th:href="@{/login}">Logowanie</a>
+                    </li>
+                    <li sec:authorize="isAnonymous()">
+                        <span class="glyphicon glyphicon-lock logicon" aria-hidden="true"></span>
+                        <a th:href="@{/registration}">Rejestracja</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <label style="text-weight:bold; color: orange;">
+                            [ <span sec:authentication="name"/> ]
+                        </label>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="#" onclick="document.getElementById('logout').submit()">Wyloguj się</a>
+                        <form th:action="@{/logout}" id="logout" method="post" style="display: none;">
+
+                            <input
+                                    type="hidden"
+                                    th:name="${_csrf.parameterName}"
+                                    th:value="${_csrf.token}"/>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded z-depth-4">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}" th:classappend="${pageName eq 'home'}?'active'">
+                    <span class="glyphicon glyphicon-leaf logoicon " aria-hidden="true"></span> JPharmacy</a>
+            </div>
+
+            <div id="navbar" class="collapse navbar-collapse navbar-custom">
+                <ul class="nav navbar-nav navbar-right">
+                    <li th:class="${pageName eq 'productList'}? 'active'">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li th:class="${pageName eq 'categoryList'}? 'active'">
+                        <a th:href="@{/categories}">Kategorie</a>
+                    </li>
+                    <li th:class="${pageName eq 'categoryList'}? 'active'">
+                        <a th:href="@{/products}">Produkty</a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" th:class="${pageName eq 'admin'}? 'active'">
+                        <a th:href="@{/admin}">Zarządzaj</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" th:class="${pageName eq 'orderList'}? 'active'">
+                        <a href="/order/list"><span class="glyphicon glyphicon-list"></span>  Zamówienia</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/cart/list"><span class="glyphicon glyphicon-shopping-cart"></span>  Koszyk</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+</div>
+
+</body>
+</html>

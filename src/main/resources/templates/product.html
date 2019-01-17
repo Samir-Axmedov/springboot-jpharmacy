@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Strona domowa</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('product')"/>
+
+<div id="main" class="container">
+    <div class="row">
+        <div class="col-lg-5 col-md-5">
+            <img style="width: 450px; height: 350px; margin: 10px 0px 10px 0px;" class="img-rounded" th:src="@{'/resources/images/'+${productDetail.productName}+'.png'}"/>
+        </div>
+        <div class="col-lg-7 col-md-7">
+            <H2 th:text="${productDetail.productName}"/>
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><b>Cena: [[${#numbers.formatDecimal(productDetail.productPrice,1,2,'COMMA')}]] zł</b></div>
+                    <div class="panel-body">
+                        <p>W magazynie: [[${productDetail.unitInStock}]]</p>
+                        <a class="btn btn-danger"th:href="@{cart/add/{id}(id=${productDetail.id})}">Dodaj do koszyka</a>
+
+                    </div>
+                </div>
+            </div>
+            <p>Kategoria: <a th:href="@{/categories(id=${productDetail.category.id})}">[[${productDetail.category.categoryName}]]</a></p>
+            <p>Producent: [[${productDetail.productManufacturer}]]</p>
+            <p>Data produkcji: [[${#dates.format(productDetail.productionDate, 'dd-MM-yyyy')}]]</p>
+            <p>Data ważności:  [[${#dates.format(productDetail.expirationDate, 'dd-MM-yyyy')}]]</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+        <ul class="nav nav-tabs nav-justified">
+            <li role="presentation" class="active"><a href="#description">Opis produktu</a></li>
+            <li role="presentation"><a href="#">&#8203;</a></li>
+            <li role="presentation"><a href="#">&#8203;</a></li>
+        </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="description">
+                    <p th:text="${productDetail.productDescription}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Formularz</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('categoryForm')"/>
+
+<div class="container">
+
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form th:method="POST" th:object="${category}" th:action="@{/categoryForm}">
+                <fieldset>
+                    <h2>Formularz dodawania / edycji Kategorii</h2>
+
+                    <div class="form-group">
+                        <input type="text" name="categoryName" th:value="*{categoryName}"
+                               class="form-control" th:classappend="${#fields.hasErrors('categoryName')}?'is-invalid'"
+                               placeholder="Nazwa kategorii" required="true" autofocus="true"/>
+
+                        <div class="error text-danger" th:if="${#fields.hasErrors('categoryName')}">
+                            <span th:each="err : ${#fields.errors('categoryName')}" th:text="${err}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <button type="submit" class="btn btn-success btn-block">Zapisz</button>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="hidden" th:field="*{id}"/>
+                            <input
+                                    type="hidden"
+                                    th:name="${_csrf.parameterName}"
+                                    th:value="${_csrf.token}"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

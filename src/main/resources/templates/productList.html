@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Strona domowa</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('productList')"/>
+
+<div th:with="boundMin=${20000},boundMax=${40000}">
+
+    <div id="main" class="container">
+
+        <div class="panel-group">
+            <div class="panel panel-info">
+                <div class="panel-heading">Wyszukaj / Filtruj</div>
+                <div class="panel-body">
+                    <form th:method="POST" th:action="@{products}" th:object="${searchCommand}">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <input th:field="*{phrase}" placeholder="Nazwa leku lub kategoria..." class="form-control"
+                                       th:classappend="${#fields.hasErrors('phrase')}?'is-invalid'"/>
+                                <div class="error text-danger" th:if="${#fields.hasErrors('phrase')}">
+                                    <p th:each="err : ${#fields.errors('phrase')}" th:text="${err}"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-2">
+
+                                <input th:field="*{minPrice}" placeholder="Cena od" class="form-control"
+                                       th:classappend="${#fields.hasErrors('minPrice')}?'is-invalid'"/>
+                                <div class="error text-danger" th:if="${#fields.hasErrors('minPrice')}">
+                                    <p th:each="err : ${#fields.errors('minPrice')}" th:text="${err}"></p>
+                                </div>
+
+                            </div>
+                            <div class="form-group col-md-2">
+
+                                <input th:field="*{maxPrice}" placeholder="Cena do" class="form-control"
+                                       th:classappend="${#fields.hasErrors('maxPrice')}?'is-invalid'"/>
+                                <div class="error text-danger" th:if="${#fields.hasErrors('maxPrice')}">
+                                    <p th:each="err : ${#fields.errors('maxPrice')}" th:text="${err}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button type="submit" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-search"></span> Wyszukaj
+                                </button>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <a th:if="${searchCommand.isEmpty() eq false or #fields.hasErrors('*')}" th:href="@{products(all)}" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-refresh"></span> Pokaż wszystko
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div th:if="${productListPage.hasContent() eq false}">
+            <span th:if="${searchCommand.isEmpty()}">Brak pojazdów w bazie</span>
+            <span th:unless="${searchCommand.isEmpty()}">Brak wyników wyszukiwania</span>
+        </div>
+        <div th:if="${productListPage.hasContent() eq true}">
+
+            <div class="well well-sm">
+            <span th:if="${searchCommand.isEmpty()}">
+                <b>Akutalnie posiadamy [[${productListPage.totalElements}]]
+                 <span th:if="${productListPage.totalElements}==1"> lek w asortymencie</span>
+                <span th:if="${productListPage.totalElements}==2"> leki w asortymencie</span>
+                <span th:if="${productListPage.totalElements}==3"> leki w asortymencie</span>
+                <span th:if="${productListPage.totalElements}==4"> leki w asortymencie</span>
+                <span th:if="${productListPage.totalElements}>=5"> leków w asortymencie</span>
+                </b>
+            </span>
+            </div>
+
+
+            <span th:unless="${searchCommand.isEmpty()}">
+                Wynik wyszukiwania: [[${productListPage.totalElements}]] leków
+            </span>
+
+            <h3>Nasze produkty</h3>
+
+            <table class="table table-striped">
+                <thead th:class="thead-inverse">
+                <tr>
+                    <th style="width: 5%">Obraz</th>
+                    <th style="width: 25%">Nazwa leku</th>
+                    <th style="width: 20%">Kategoria</th>
+                    <th style="width: 10%">Data ważności</th>
+                    <th style="width: 10%">Cena</th>
+                    <th sec:authorize="hasRole('ADMIN')" style="width: 30%">Opcje administratora</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${productListPage.content}">
+                    <td>
+                        <img th:src="@{'/resources/images/'+${product.productName}+'.png'}" style="width:140px" height="130px" class="img-rounded"/>
+                    </td>
+                    <td>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/products(id=${product.Id})}">[[${product.productName}]]</a>
+                        <span sec:authorize="isAnonymous()"> [[${product.productName}]]</span>
+                    </td>
+                    <td valign="middle">[[${product.category.categoryName}]]</td>
+                    <td>[[${#dates.format(product.expirationDate, 'dd-MM-yyyy')}]]</td>
+                    <td><b>[[${#numbers.formatDecimal(product.productPrice,1,2,'COMMA')}]] zł</b></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="btn btn-warning" th:href="@{/products(id=${product.Id})}">Podejrzyj</a>
+                        <a class="btn btn-danger" th:href="@{products(did=${product.Id})}">Usuń</a>
+                        <a class="btn btn-info" th:href="@{productForm(id=${product.Id})}">Edytuj</a>
+                    </td>
+
+                </tr>
+
+                </tbody>
+            </table>
+            <a sec:authorize="hasRole('ADMIN')" class="btn btn-success btn-block" href="productForm.html">Dodaj nowy produkt</a>
+            <div th:replace="shared/pagination :: pager('/productList', ${productListPage})"></div>
+
+        </div>
+
+
+
+
+    </div>
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

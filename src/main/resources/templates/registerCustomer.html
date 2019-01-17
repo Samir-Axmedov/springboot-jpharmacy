@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Rejestracja</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('home')"/>
+
+<div class="container" id="main">
+
+    <div class="row" style="margin-top:20px; margin-bottom: 100px;">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form th:method="POST" th:object="${userCommand}">
+                <fieldset>
+                    <div class="registerheader">
+                        <h2>Formularz rejestracji</h2>
+                        <p>Podaj swoje dane poniżej:</p>
+                    </div>
+                    <div class="form-group">
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                        </div>
+                    </div>
+                    <h2>Informacje podstawowe</h2>
+                    <h4>Imie</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userFirstName}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Nazwisko</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userLastName}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Email</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userEmail}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Telefon</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userPhone}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Nazwa użytkownika</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{username}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Hasło</h4>
+                    <div class="form-group">
+                        <input type="password" th:field="*{password}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Powtórz hasło:</h4>
+                    <div class="form-group">
+                        <input type="password" th:field="*{passwordConfirm}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+
+                    <h2>Dane adresowe:</h2>
+                    <h4>Ulica</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userAddress.street}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Numer domu:</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userAddress.city}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Kod pocztowy:</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userAddress.zipCode}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Miasto:</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userAddress.city}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <h4>Kraj:</h4>
+                    <div class="form-group">
+                        <input type="text" th:field="*{userAddress.country}"
+                               class="form-control" required="true" autofocus="true"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <a href="/" class="btn btn-lg btn-info btn-block" role="button">Wróć</a>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input
+                                    type="hidden"
+                                    th:name="${_csrf.parameterName}"
+                                    th:value="${_csrf.token}" />
+                            <input type="submit" class="btn btn-lg btn-success btn-block" value="Zarejestruj"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

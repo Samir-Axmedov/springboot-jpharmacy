@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Kategorie</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('categoryList')"/>
+    <div id="main" class="container">
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6"><H2>Kategorie</H2></div>
+            <div class="col-xs-6 col-sm-6 col-md-6">
+            </div>
+        </div>
+        <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Nazwa kategorii</th>
+                    <th sec:authorize="hasRole('ADMIN')">Opcje administratora</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categoryListPage.content}">
+                    <td>
+                        <a th:href="@{/categoryForm(id=${category.Id})}">[[${category.categoryName}]]</a>
+                    </td>
+
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="btn btn-danger" th:href="@{categories(did=${category.Id})}">Usuń</a>
+                        <a class="btn btn-info" th:href="@{categoryForm(id=${category.Id})}">Edytuj</a>
+                    </td>
+
+                </tr>
+
+                </tbody>
+            </table>
+
+        <a sec:authorize="hasRole('ADMIN')" class="btn btn-success btn-block" href="categoryForm">Dodaj nową kategorię</a>
+
+        <div th:replace="shared/pagination :: pager('/categories', ${categoryListPage})"></div>
+        </div>
+
+
+
+    </div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+
+    <div th:replace="shared/header :: header-css"/>
+    <title>Kategorie</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('users')"/>
+<div id="main" class="container">
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6"><H2>Użytkownicy</H2></div>
+        <div class="col-xs-6 col-sm-6 col-md-6">
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Nazwa użytkownika</th>
+            <th>E-mail</th>
+            <th>Telefon</th>
+            <th>Enabled</th>
+            <th sec:authorize="hasRole('ADMIN')">Opcje administratora</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${userListPage.content}">
+            <td>[[${user.id}]]</td>
+            <td>[[${user.username}]]</td>
+            <td>[[${user.userEmail}]]</td>
+            <td>[[${user.userPhone}]]</td>
+            <td>[[${user.enabled}]]</td>
+            <td sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="btn btn-danger btn-block" style="letter-spacing: 1px"  th:href="@{users(did=${user.id})}">Usuń</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <div th:replace="shared/pagination :: pager('/users', ${userListPage})"></div>
+</div>
+
+
+
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

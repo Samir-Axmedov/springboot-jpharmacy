@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Koszyk</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('basket')"/>
+
+<div th:with="boundMin=${20000},boundMax=${40000}">
+
+    <div id="main" class="container">
+
+
+            <span th:if="${#lists.isEmpty(basketList)}">
+                <h1>Twój koszyk jest obecnie pusty.</h1>
+            </span>
+        <span th:unless="${#lists.isEmpty(basketList)}">
+                <H1>Koszyk </H1>
+                W koszyku znajduje się <span class="badge"> [[${#lists.size(basketList)}]]</span>
+                <span th:if="${#lists.size(basketList)}==1"> książka.</span>
+                <span th:if="${#lists.size(basketList)}==2"> książki.</span>
+                <span th:if="${#lists.size(basketList)}==3"> książki.</span>
+                <span th:if="${#lists.size(basketList)}==4"> książki.</span>
+                <span th:if="${#lists.size(basketList)}>=5"> książek.</span>
+                <br><br>
+            </span>
+
+
+        <span th:unless="${#lists.isEmpty(basketList)}">
+
+            <table class="table table-hover" id="tabela">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Kategoria</th>
+                    <th>Cena</th>
+                    <th>Data ważności</th>
+                </tr>
+                </thead>
+                <tbody>
+                        <tr th:each="product : ${basketList}">
+                            <td>
+                                <a sec:authorize="isAuthenticated()" th:href="@{/products(id=${product.id})}">[[${product.productName}]]</a>
+                                <span sec:authorize="isAnonymous()"> [[${product.productName}]]</span>
+                            </td>
+                            <td>[[${product.category.categoryName}]]</td>
+                            <td>[[${#numbers.formatDecimal(product.productPrice,1,2,'COMMA')}]]</td>
+                            <td>[[${#dates.format(product.expirationDate, 'dd-MM-yyyy')}]]</td>
+                            <td><a class="btn btn-danger" th:href="@{basket.html(did=${product.id})}">
+                                <span class="glyphicon glyphicon-trash"></span> Usuń z koszyka</a></td>
+                        </tr>
+                </tbody>
+            </table>
+
+                <div>
+                    <a sec:authorize="isAuthenticated()" class="btn btn-success" th:href="@{/borrow.html(all)}">
+                    <span class="glyphicon glyphicon-tags"></span> Wypożycz wszystkie w koszyku</a>
+                </div>
+
+                <div>
+                    <a class="btn btn-danger" th:href="@{/basket.html(dall)}">
+                    <span class="glyphicon glyphicon-trash"></span> Usuń wszystkie z koszyka</a>
+                </div>
+
+            </span>
+
+    </div>
+
+
+</div>
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

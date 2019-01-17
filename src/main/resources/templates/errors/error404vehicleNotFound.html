@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="shared/header :: header-css"/>
+    <title>Strona domowa</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('home')"/>
+
+<div id="main" class="container">
+
+    <div>
+        <h1>404 - Nie znaleziono pojazdu</h1>
+        <div>
+            URL żądania: <span th:text="${url}"></span></br>
+            Wyjątek: <span th:object="${exception}" th:text="*{message}"></span>
+        </div>
+    </div>
+
+</div>
+<div th:replace="shared/footer :: footer"></div>
+</body>
+</html>

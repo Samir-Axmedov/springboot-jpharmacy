@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="/shared/header :: header-css"/>
+    <title>Przedmioty w koszyku</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('orderList')"/>
+
+<div id="main" class="container">
+
+ <span th:if="${#lists.isEmpty(userOrders)}">
+               <center> <h3>Aktualnie nie masz żadnych zamówień</h3></center>
+            </span>
+    <span th:unless="${#lists.isEmpty(userOrders)}">
+                <H1>Twoje zamówienia </H1>
+
+        Masz <b>[[${#lists.size(userOrders)}]]</b>
+                <span th:if="${#lists.size(userOrders)}==1"> zamówienie</span>
+                <span th:if="${#lists.size(userOrders)}==2"> zamówienia</span>
+                <span th:if="${#lists.size(userOrders)}==3"> zamówienia</span>
+                <span th:if="${#lists.size(userOrders)}==4"> zamówienia</span>
+                <span th:if="${#lists.size(userOrders)}>=5"> zamówień</span>
+        <hr>
+            </span>
+    <span th:unless="${#lists.isEmpty(userOrders)}">
+
+            <table class="table table-hover" id="tabela">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Produkt</th>
+                    <th>Kategoria</th>
+                    <th>Cena</th>
+                </tr>
+                </thead>
+                <tbody>
+                        <tr th:each="order : ${userOrders}">
+                            <td>
+                                [[${order.id}]]
+                            </td>
+                            <td>
+                                <a sec:authorize="isAuthenticated()" th:href="@{/products(id=${order.id})}">[[${order.item_name}]]</a>
+                                <span sec:authorize="isAnonymous()"> [[${order.item_name}]]</span>
+                            </td>
+                            <td> [[${order.category.categoryName}]]</td>
+                            <td>[[${#numbers.formatDecimal(order.item_price,2,2,'POINT')}]] zł</td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <hr>
+    </span>
+        </div>
+
+</div>
+<div th:replace="/shared/footer :: footer"></div>
+</body>
+</html>

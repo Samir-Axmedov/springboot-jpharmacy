@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="/shared/header :: header-css"/>
+    <title>Przedmioty w koszyku</title>
+</head>
+<body>
+<div th:replace="shared/header :: header('itemList')"/>
+
+<div id="main" class="container">
+
+
+    <span th:if="${#lists.isEmpty(userCart)}">
+               <center> <h3>Twój koszyk jest obecnie pusty</h3></center>
+            </span>
+    <span th:unless="${#lists.isEmpty(userCart)}">
+                <H1>Koszyk </H1>
+
+        W Twoim koszyku znajduje się <b>[[${#lists.size(userCart)}]]</b>
+                <span th:if="${#lists.size(userCart)}==1"> lek</span>
+                <span th:if="${#lists.size(userCart)}==2"> leki</span>
+                <span th:if="${#lists.size(userCart)}==3"> leki</span>
+                <span th:if="${#lists.size(userCart)}==4"> leki</span>
+                <span th:if="${#lists.size(userCart)}>=5"> leków</span>
+        <hr>
+            </span>
+
+    <span th:unless="${#lists.isEmpty(userCart)}">
+
+            <table class="table table-hover" id="tabela">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Produkt</th>
+                    <th>Kategoria</th>
+                    <th>Cena</th>
+                    <th>Data ważności</th>
+                    <th>Opcje</th>
+                </tr>
+                </thead>
+                <tbody>
+                        <tr th:each="cart : ${userCart}">
+                            <td>
+                                <a sec:authorize="isAuthenticated()" th:href="@{/products(id=${cart.product.id})}">[[${cart.product.productName}]]</a>
+                                <span sec:authorize="isAnonymous()"> [[${cart.product.productName}]]</span>
+                            </td>
+                            <td>[[${cart.product.category.categoryName}]]</td>
+                            <td>[[${#numbers.formatDecimal(cart.product.productPrice,2,2,'POINT')}]] zł</td>
+                            <td>[[${#dates.format(cart.product.expirationDate, 'dd-MM-yyyy')}]]</td>
+                            <td><a class="btn btn-danger" th:href="@{/cart/delete/{id}(id=${cart.id})}">
+                                <span class="glyphicon glyphicon-trash"></span> Usuń z koszyka</a></td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <hr>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <h4>Wartość koszyka: [[${#numbers.formatDecimal(itemsPrice,2,2,'POINT')}]] zł</h4>
+
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6">
+            <a class="btn btn-success btn-block" type="submit" name="action" th:href="@{/order/add}">Złóż zamówienie</a>
+            </div>
+
+        </div>
+    </span>
+
+</div>
+<div th:replace="/shared/footer :: footer"></div>
+</body>
+</html>
