@@ -8,6 +8,7 @@ Used technologies:
 * Spring Boot 
 * Spring Security
 * Spring Data JPA
+* PostgreSQL
 * Lombok
 * Log4j
 * HTML
