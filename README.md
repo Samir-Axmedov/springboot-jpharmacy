@@ -1,4 +1,4 @@
-# springboot JPharmacy application
+# JPharmacy application
 
 JPharmacy is an online pharmacy. It is a Spring Boot application. It allows ordering medicines. For the administrator role, it provides all CRUD functions like managing categories, products, and users.
 
